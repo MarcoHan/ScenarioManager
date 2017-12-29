@@ -1,0 +1,10 @@
+name: ScenarioManager
+main: com.MarcoHan.ScenManager.Scenario
+version: 1.0
+author: MarcoHan
+
+commands:
+    scenario:
+        description: Scenario Manager
+    wish:
+        description: Make a Wish Foundation
