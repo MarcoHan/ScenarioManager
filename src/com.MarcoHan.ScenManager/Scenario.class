@@ -1,0 +1,366 @@
+package com.MarcoHan.ScenManager;
+
+import com.MarcoHan.ScenManager.scenarios.BestPvE;
+import com.MarcoHan.ScenManager.scenarios.BloodDiamonds;
+import com.MarcoHan.ScenManager.scenarios.Cutclean;
+import com.MarcoHan.ScenManager.scenarios.Doubleornothing;
+import com.MarcoHan.ScenManager.scenarios.Entropy;
+import com.MarcoHan.ScenManager.scenarios.Genie;
+import com.MarcoHan.ScenManager.scenarios.GoldRush;
+import com.MarcoHan.ScenManager.scenarios.Gotohell;
+import com.MarcoHan.ScenManager.scenarios.Lootcrate;
+import com.MarcoHan.ScenManager.scenarios.Paranoia;
+import com.MarcoHan.ScenManager.scenarios.Pokeball;
+import com.MarcoHan.ScenManager.scenarios.Skyhigh;
+import com.MarcoHan.ScenManager.scenarios.Snowballfight;
+import com.MarcoHan.ScenManager.scenarios.TimeBomb;
+import java.util.ArrayList;
+import java.util.logging.Logger;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class Scenario
+  extends JavaPlugin{
+  public static String prefix = ChatColor.RED + "[" + ChatColor.YELLOW + "Helio" + ChatColor.RED + "] " + ChatColor.RESET;
+  public static Entropy instance;
+  
+  public void onEnable(){
+    getLogger().info("Scenario Manager Enabled");
+    Bukkit.getServer().getPluginManager().registerEvents(new Cutclean(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new Entropy(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new BestPvE(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new BloodDiamonds(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new Doubleornothing(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new Genie(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new GoldRush(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new Gotohell(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new Skyhigh(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new Lootcrate(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new Paranoia(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new Pokeball(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new Snowballfight(this), this);
+    Bukkit.getServer().getPluginManager().registerEvents(new TimeBomb(this), this);
+    getCommand("wish").setExecutor(new Genie(this));
+  }
+  
+  public void onDisable(){
+    getLogger().info("Scenario Manager Disabled");
+  }
+  
+  public static boolean cutclean = false;
+  public static boolean entropy = false;
+  public static boolean blooddiamonds = false;
+  public static boolean doubleornothing = false;
+  public static boolean genie = false;
+  public static boolean goldrush = false;
+  public static boolean gotohell = false;
+  public static boolean skyhigh = false;
+  public static boolean lootcrate = false;
+  public static boolean paranoia = false;
+  public static boolean pokeball = false;
+  public static boolean potentialhearts = false;
+  public static boolean snowballfight = false;
+  public static boolean timebomb = false;
+  
+  public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
+    if (args.length == 0){
+      if (cmd.getName().equalsIgnoreCase("scenario")){
+        Player p = (Player)sender;
+        p.sendMessage(prefix + "Syntax Error! /scenario <gamemode/list> [Enable/Disable]");
+      }
+      return false;
+    }
+    if ((cmd.getName().equalsIgnoreCase("scenario")) && 
+      (sender.hasPermission("UHC.Scenario"))){
+      ArrayList<String> off;
+      if (args[0].equalsIgnoreCase("list")){
+        ArrayList<String> on = new ArrayList();
+        off = new ArrayList();
+        on.removeAll(on);
+        off.removeAll(off);
+        if (cutclean) {
+          on.add("Cutclean,");
+        } else {
+          off.add("Cutclean,");
+        }
+        if (entropy) {
+          on.add("Entropy,");
+        } else {
+          off.add("Entropy,");
+        }
+        if (BestPvE.bestpve) {
+          on.add("BestPvE,");
+        } else {
+          off.add("BestPvE,");
+        }
+        if (blooddiamonds) {
+          on.add("Blood Diamonds,");
+        } else {
+          off.add("Blood Diamonds,");
+        }
+        if (doubleornothing) {
+          on.add("Double or Nothing,");
+        } else {
+          off.add("Double or Nothing,");
+        }
+        if (genie) {
+          on.add("Genie,");
+        } else {
+          off.add("Genie,");
+        }
+        if (goldrush) {
+          on.add("Gold Rush,");
+        } else {
+          off.add("Gold Rush,");
+        }
+        if (gotohell) {
+          on.add("Go to Hell,");
+        } else {
+          off.add("Go to Hell,");
+        }
+        if (skyhigh) {
+          on.add("Sky High,");
+        } else {
+          off.add("Sky High,");
+        }
+        if (lootcrate) {
+          on.add("Loot Crate,");
+        } else {
+          off.add("Loot Crate,");
+        }
+        if (paranoia) {
+          on.add("Paranoia,");
+        } else {
+          off.add("Paranoia,");
+        }
+        if (pokeball) {
+          on.add("PokeBall,");
+        } else {
+          off.add("PokeBall,");
+        }
+        if (potentialhearts) {
+          on.add("Potential Hearts,");
+        } else {
+          off.add("Potential Hearts,");
+        }
+        if (snowballfight) {
+          on.add("Snowball Fight,");
+        } else {
+          off.add("Snowball Fight,");
+        }
+        if (timebomb) {
+          on.add("Time Bomb,");
+        } else {
+          off.add("Time Bomb,");
+        }
+        String enabled = "";
+        for (String s : on) {
+          enabled = enabled + s + " ";
+        }
+        enabled = enabled.replace("]", "").replace("[", "");
+        String disabled = "";
+        for (String s : off) {
+          disabled = disabled + s + " ";
+        }
+        disabled = disabled.replace("]", "").replace("[", "");
+        
+        sender.sendMessage(prefix + ChatColor.GREEN + enabled + ChatColor.RED + disabled);
+      }
+      if (args[0].equalsIgnoreCase("cutclean")){
+        if (args[1].equalsIgnoreCase("enable"))
+        {
+          Bukkit.broadcastMessage(prefix + "Cutclean has been Enabled by " + sender.getName());
+          cutclean = true;
+        }
+        if (args[1].equalsIgnoreCase("disable"))
+        {
+          Bukkit.broadcastMessage(prefix + "Cutclean has been Disabled by " + sender.getName());
+          cutclean = false;
+        }
+      }
+      if (args[0].equalsIgnoreCase("Entropy")){
+        if (args[1].equalsIgnoreCase("enable")){
+          Bukkit.broadcastMessage(prefix + "Entropy has been Enabled by " + sender.getName());
+          entropy = true;
+          Entropy.enablee();
+        }
+        if (args[1].equalsIgnoreCase("disable")){
+          Bukkit.broadcastMessage(prefix + "Entropy has been Disabled by " + sender.getName());
+          entropy = false;
+          Entropy.disablee();
+        }
+      }
+      if (args[0].equalsIgnoreCase("bestpve")){
+        if (args[1].equalsIgnoreCase("enable")){
+          Bukkit.broadcastMessage(prefix + "BestPvE has been Enabled by " + sender.getName());
+          BestPvE.bestpve = true;
+          BestPvE.enablebp();
+        }
+        if (args[1].equalsIgnoreCase("disable")){
+          Bukkit.broadcastMessage(prefix + "BestPvE has been Disabled by " + sender.getName());
+          BestPvE.bestpve = false;
+          BestPvE.disablebp();
+        }
+      }
+      if (args[0].equalsIgnoreCase("blooddiamonds")){
+        if (args[1].equalsIgnoreCase("enable"))
+        {
+          Bukkit.broadcastMessage(prefix + "Blood Diamonds has been Enabled by " + sender.getName());
+          blooddiamonds = true;
+        }
+        if (args[1].equalsIgnoreCase("disable")){
+          Bukkit.broadcastMessage(prefix + "Blood Diamonds has been Disabled by " + sender.getName());
+          blooddiamonds = false;
+        }
+      }
+      if (args[0].equalsIgnoreCase("Doubleornothing")){
+        if (args[1].equalsIgnoreCase("enable")){
+          Bukkit.broadcastMessage(prefix + "Double or Nothing has been Enabled by " + sender.getName());
+          doubleornothing = true;
+        }
+        if (args[1].equalsIgnoreCase("disable")){
+          Bukkit.broadcastMessage(prefix + "Double or Nothing has been Disabled by " + sender.getName());
+          doubleornothing = false;
+        }
+      }
+      if (args[0].equalsIgnoreCase("genie")){
+        if (args[1].equalsIgnoreCase("enable")){
+          Bukkit.broadcastMessage(prefix + "Genie has been Enabled by " + sender.getName());
+          genie = true;
+          Genie.enableg();
+        }
+        if (args[1].equalsIgnoreCase("disable")){
+          Bukkit.broadcastMessage(prefix + "Genie has been Disabled by " + sender.getName());
+          genie = false;
+          Genie.disableg();
+        }
+      }
+      if (args[0].equalsIgnoreCase("goldrush")){
+        if (args[1].equalsIgnoreCase("enable")) {
+          Bukkit.broadcastMessage(prefix + "Gold Rush has been Enabled by " + sender.getName());
+          goldrush = true;
+        }
+        if (args[1].equalsIgnoreCase("disable"))
+        {
+          Bukkit.broadcastMessage(prefix + "Gold Rush has been Disabled by " + sender.getName());
+          goldrush = false;
+        }
+      }
+      if (args[0].equalsIgnoreCase("gotohell")){
+        if (args[1].equalsIgnoreCase("enable")){
+          Bukkit.broadcastMessage(prefix + "Go To Hell has been Enabled by " + sender.getName() + " You will need to be in the nether in 45 minutes");
+          gotohell = true;
+          Gotohell.enablegth();
+        }
+        if (args[1].equalsIgnoreCase("disable")){
+          Bukkit.broadcastMessage(prefix + "Go To Hell has been Disabled by " + sender.getName());
+          gotohell = false;
+          Gotohell.disablegth();
+        }
+      }
+      if (args[0].equalsIgnoreCase("skyhigh")) {
+        if (args[1].equalsIgnoreCase("enable")){
+          Bukkit.broadcastMessage(prefix + "SkyHigh has been Enabled by " + sender.getName() + " You will need to be above y-101 in 45 minutes");
+          skyhigh = true;
+          Skyhigh.enablesh();
+        }
+        if (args[1].equalsIgnoreCase("disable")) {
+          Bukkit.broadcastMessage(prefix + "SkyHigh has been Disabled by " + sender.getName());
+          skyhigh = false;
+          Skyhigh.disablesh();
+        }
+      }
+      if (args[0].equalsIgnoreCase("lootcrate")){
+        if (args[1].equalsIgnoreCase("enable")){
+          Bukkit.broadcastMessage(prefix + "Lootcrate has been Enabled by " + sender.getName());
+          lootcrate = true;
+          Lootcrate.enabelc();
+        }
+        if (args[1].equalsIgnoreCase("disable"))
+        {
+          Bukkit.broadcastMessage(prefix + "Lootcrate has been Disabled by " + sender.getName());
+          lootcrate = false;
+          Lootcrate.disablelc();
+        }
+      }
+      if (args[0].equalsIgnoreCase("paranoia")){
+        if (args[1].equalsIgnoreCase("enable")){
+          Bukkit.broadcastMessage(prefix + "Paranoia has been Enabled by " + sender.getName());
+          paranoia = true;
+        }
+        if (args[1].equalsIgnoreCase("disable")) {
+          Bukkit.broadcastMessage(prefix + "Paranoia has been Disabled by " + sender.getName());
+          paranoia = false;
+        }
+      }
+      if (args[0].equalsIgnoreCase("pokeball")){
+        if (args[1].equalsIgnoreCase("enable")) {
+          Bukkit.broadcastMessage(prefix + "Pokeball has been Enabled by " + sender.getName());
+          pokeball = true;
+          for (Player p : Bukkit.getOnlinePlayers()) {
+            p.getInventory().addItem(new ItemStack[] { new ItemStack(Material.EGG, 4) });
+          }
+        }
+        if (args[1].equalsIgnoreCase("disable")) {
+          Bukkit.broadcastMessage(prefix + "Pokeball has been Disabled by " + sender.getName());
+          pokeball = false;
+        }
+      }
+      if (args[0].equalsIgnoreCase("potentialhearts")){
+        if (args[1].equalsIgnoreCase("enable")){
+          Bukkit.broadcastMessage(prefix + " Potential Hearts has been Enabled by " + sender.getName());
+          potentialhearts = true;
+          for (Player p : Bukkit.getOnlinePlayers()) {
+            p.setMaxHealth(40.0D);
+          }
+        }
+        if (args[1].equalsIgnoreCase("disable")){
+          Bukkit.broadcastMessage(prefix + " Potential Hearts has been Disabled by " + sender.getName());
+          potentialhearts = false;
+          for (Player p : Bukkit.getOnlinePlayers()) {
+            p.setMaxHealth(20.0D);
+          }
+        }
+      }
+      if (args[0].equalsIgnoreCase("snowballfight")){
+        if (args[1].equalsIgnoreCase("enable")){
+          Bukkit.broadcastMessage(prefix + "Snowball Fight has been Enabled by " + sender.getName());
+          snowballfight = true;
+        }
+        if (args[1].equalsIgnoreCase("disable"))
+        {
+          Bukkit.broadcastMessage(prefix + "Snowball Fight has been Disabled by " + sender.getName());
+          snowballfight = false;
+        }
+      }
+      if (args[0].equalsIgnoreCase("timebomb")) {
+        if (args[1].equalsIgnoreCase("enable")) {
+          Bukkit.broadcastMessage(prefix + "Time Bomb has been Enabled by " + sender.getName());
+          timebomb = true;
+          for (World world : Bukkit.getWorlds()) {
+            world.setGameRuleValue("keepInventory", "true");
+          }
+        }
+        if (args[1].equalsIgnoreCase("disable")) {
+          Bukkit.broadcastMessage(prefix + "Time Bomb has been Disabled by " + sender.getName());
+          timebomb = false;
+          for (World world : Bukkit.getWorlds()) {
+            world.setGameRuleValue("keepInventory", "false");
+          }
+        }
+      }
+    }
+    return false;
+  }
+}
