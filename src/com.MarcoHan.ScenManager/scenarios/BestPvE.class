@@ -1,0 +1,81 @@
+package com.MarcoHan.ScenManager.scenarios;
+
+import java.util.ArrayList;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitScheduler;
+
+public class BestPvE
+  implements Listener{
+  private static Plugin plugin;
+  
+  public BestPvE(Plugin plugin){
+    plugin = plugin;
+  }
+  
+  public static boolean bestpve = false;
+  public static ArrayList<String> best = new ArrayList();
+  private static int de;
+  
+  public static void enablebp(){
+    for (Player p : ) {
+      best.add(p.getName());
+    }
+    de = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable(){
+      public void run()
+      {
+        for (Player p : ) {
+          if (BestPvE.best.contains(p.getName())){
+            p.setMaxHealth(p.getMaxHealth() + 2.0D);
+            p.setHealth(p.getHealth() + 2.0D);
+            p.sendMessage(ChatColor.GREEN + "You have received one heart!");
+          }
+        }
+      }
+    }, 12000L, 12000L);
+  }
+  
+  public static void disablebp(){
+    Bukkit.getScheduler().cancelTask(de);
+    best.removeAll(best);
+    for (Player p : Bukkit.getOnlinePlayers()) {
+      p.setMaxHealth(20.0D);
+    }
+  }
+  
+  @EventHandler(priority=EventPriority.MONITOR, ignoreCancelled=true)
+  public void damage(EntityDamageEvent e){
+    if ((!e.isCancelled()) && 
+      (bestpve)){
+      Entity et = e.getEntity();
+      if ((et instanceof Player)) {
+        Player p = (Player)et;
+        if (best.contains(p.getName())) {
+          best.remove(p.getName());
+          Bukkit.broadcastMessage(ChatColor.RED + p.getName() + " is no longer on the BestPvE list");
+        }
+      }
+    }
+  }
+  
+  @EventHandler
+  public void onkill(PlayerDeathEvent e){
+    if (bestpve){
+      Player d = e.getEntity();
+      d.setMaxHealth(20.0D);
+      Player k = d.getKiller();
+      if (k != null){
+        best.add(k.getName());
+        Bukkit.broadcastMessage(ChatColor.GREEN + k.getName() + " is back on the BestPvE list");
+      }
+    }
+  }
+}
